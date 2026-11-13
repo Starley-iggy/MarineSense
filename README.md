@@ -153,14 +153,19 @@ pandas >= 2.0
 plotly >= 5.20
 
 Python 3.10 or newer is required.
+
 8. Project Structure
+```
 MarineSense/
 ├── app.py                 # Dashboard, simulation, data handling and warning logic
 ├── requirements.txt       # Python package dependencies
 ├── run_dashboard.bat      # Windows quick-start script
 ├── PRESENTATION_NOTES.md  # Supporting presentation notes
 └── README.md              # Project documentation
+```
+
 9. Installation and Execution
+    
 Prerequisites
 
     Python 3.10 or newer
