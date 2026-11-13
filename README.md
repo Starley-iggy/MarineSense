@@ -2,6 +2,25 @@
 <div align="center">
 MarineSense
 Marine Motion & Sensor Monitoring Dashboard
+<table>
+  <tr>
+    <td width="50%">
+      <img src="https://github.com/user-attachments/assets/9d738d0c-e477-4467-90c2-aa7bb930fcb1" width="100%">
+    </td>
+    <td width="50%">
+      <img src="https://github.com/user-attachments/assets/f5ff2a80-e283-4d21-88dc-afe8ee988e77" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="https://github.com/user-attachments/assets/0a3fa4bf-cbd6-46e2-99fc-63c0cf0e16e1" width="100%">
+    </td>
+    <td width="50%">
+      <img src="https://github.com/user-attachments/assets/7e038fc7-86a7-4783-9769-28e71e1889b5" width="100%">
+    </td>
+  </tr>
+</table>
+
 
 A Python-based prototype for simulating, processing, visualising, and monitoring marine motion data.
 
