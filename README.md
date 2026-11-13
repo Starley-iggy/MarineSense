@@ -1,6 +1,5 @@
-
+<h1 align="center">MarineSense</h1>
 <div align="center">
-MarineSense
 Marine Motion & Sensor Monitoring Dashboard
 <table>
   <tr>
@@ -196,6 +195,8 @@ Prerequisites
 git clone https://github.com/Starley-iggy/MarineSense.git
 cd MarineSense
 
+
+
 Alternatively, download the repository as a ZIP archive and extract it locally.
 9.2 Create a virtual environment
 
@@ -207,10 +208,13 @@ macOS / Linux:
 python3 -m venv .venv
 source .venv/bin/activate
 
+
 A virtual environment isolates the project's Python dependencies from other Python applications on the machine.
 9.3 Install dependencies
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+
+
 9.4 Start the dashboard
 python -m streamlit run app.py
 
@@ -243,6 +247,7 @@ marinesense_sensor_history.csv
 The export contains the measurement fields and timestamps represented in the application's history. It can be opened in spreadsheet software or used as input for additional analysis.
 
 The current implementation does not write readings to a database or guarantee persistence after the Streamlit session or application process ends.
+
 12. Design Considerations
 Separation of measurement and presentation
 
