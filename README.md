@@ -1,6 +1,16 @@
-<h1 align="center">MarineSense</h1>
-<div align="center">
-Marine Motion & Sensor Monitoring Dashboard
+# MarineSense
+
+**A dashboard that shows how a ship moves at sea, using simulated sensor data.**
+
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![Streamlit](https://img.shields.io/badge/streamlit-%E2%89%A51.36-red)
+![Status](https://img.shields.io/badge/status-prototype-orange)
+
+MarineSense is a small Python app that runs in your web browser. It pretends to be a set of sensors on a ship, collects their readings, draws charts of them, and shows a warning when the ship rolls or shakes too much.
+
+> [!IMPORTANT]
+> All data in MarineSense is **simulated**. The app is not connected to any real ship or sensor. Do not use it for navigation, cargo, engineering, or safety decisions.
+
 <table>
   <tr>
     <td width="50%">
@@ -20,290 +30,273 @@ Marine Motion & Sensor Monitoring Dashboard
   </tr>
 </table>
 
+---
 
-A Python-based prototype for simulating, processing, visualising, and monitoring marine motion data.
+## Table of Contents
 
+- [What it does](#what-it-does)
+- [Key terms](#key-terms)
+- [Getting started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the app](#running-the-app)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [How it works](#how-it-works)
+- [Data format](#data-format)
+- [Project structure](#project-structure)
+- [Tech stack](#tech-stack)
+- [Limitations](#limitations)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Disclaimer](#disclaimer)
 
+---
 
+## What it does
 
+| Feature | Description |
+|---|---|
+| **Simulated sensors** | Generates realistic-looking, smoothly changing motion data for a fictional ship. |
+| **History** | Starts with 60 readings (one per minute) and keeps up to the latest 180. |
+| **Live mode** | Adds a new reading automatically about every 3 seconds. |
+| **Manual mode** | Adds a single new reading when you click a button. |
+| **Ship selection** | Lets you switch between several fictional ships. |
+| **Key numbers** | Shows the latest roll, pitch, heave, and acceleration at a glance. |
+| **Charts** | Interactive charts that show how values change over time. |
+| **Warnings** | Alerts you when roll or acceleration goes above a limit you choose. |
+| **Raw data** | Shows every reading in a table. |
+| **CSV export** | Downloads all readings as a spreadsheet-friendly file. |
 
-</div>
-Table of Contents
+## Key terms
 
-    1. Project Overview
-    2. Objectives
-    3. System Capabilities
-    4. Sensor Model and Data
-    5. System Architecture
-    6. Monitoring and Alert Logic
-    7. Technology Stack
-    8. Project Structure
-    9. Installation and Execution
-    10. Using the Dashboard
-    11. Data Export
-    12. Design Considerations
-    13. Current Limitations
-    14. Potential Future Development
-    15. Disclaimer and Intended Use
+If you are new to ship motion, these are the values the app tracks:
 
-1. Project Overview
+| Term | Plain meaning | Unit |
+|---|---|---|
+| **Roll** | The ship tilting from side to side (left/right). | degrees (°) |
+| **Pitch** | The ship tilting forwards and backwards (nose up/down). | degrees (°) |
+| **Heave** | The ship moving straight up and down with the waves. | metres (m) |
+| **Acceleration** | How strongly the ship is being pushed or shaken. | m/s² |
+| **Temperature** | A simulated temperature reading. | °C |
+| **Threshold** | The limit above which the app shows a warning. | — |
 
-MarineSense is a Python prototype that demonstrates how marine motion and sensor measurements can be collected, represented, monitored, and presented through a web-based dashboard.
+## Getting started
 
-The application simulates a vessel's motion-related measurements, maintains a rolling history of generated readings, visualises changes over time, and evaluates selected measurements against configurable warning thresholds. The dashboard is built with Streamlit, while Pandas is used to organise the readings and Plotly provides interactive time-series visualisations.
+### Prerequisites
 
-The project is intended to demonstrate a small end-to-end data application: from generating structured measurements to presenting operationally relevant information in a human-readable interface.
+- [Python](https://www.python.org/downloads/) **3.10 or newer**
+- [Git](https://git-scm.com/downloads) (optional — you can also download the ZIP)
+- An internet connection for the first installation
 
-    Data integrity statement: MarineSense currently uses generated demonstration data. It does not receive measurements from physical sensors, vessel systems, or an external data service.
+Check your Python version:
 
-2. Objectives
-
-The project has the following technical objectives:
-
-    Sensor-data modelling — represent marine motion measurements in a consistent, structured format.
-    Time-series processing — maintain and transform a chronological collection of readings.
-    Operational visualisation — make changes in motion-related measurements visible through interactive charts and summary metrics.
-    Threshold-based monitoring — demonstrate how configurable rules can identify values that exceed illustrative limits.
-    Data accessibility — allow users to inspect the underlying readings and export the recorded history as CSV.
-    Interactive operation — provide manual and automatic simulation controls through a browser-based interface.
-
-These objectives describe the scope of the prototype; they should not be interpreted as evidence of integration with production maritime infrastructure.
-3. System Capabilities
-Capability	Implementation
-Sensor-data simulation	Generates fictional, continuously varying measurements
-Historical data	Initial history of 60 readings, with timestamps spaced one minute apart
-Live demonstration	Optional automatic generation of a new reading every three seconds
-Manual updates	Generates a new reading on user request
-Vessel selection	Selects between fictional demonstration vessel names
-KPI overview	Displays the latest roll, pitch, heave, and acceleration values
-Time-series visualisation	Interactive Plotly charts for motion and measurement trends
-Warning evaluation	Checks roll angle and acceleration against user-defined thresholds
-Raw-data inspection	Displays the recorded readings in a tabular view
-CSV export	Downloads the available sensor history
-Session persistence	Uses Streamlit Session State to retain data during application reruns
-Dashboard design
-
-The interface is organised around a monitoring workflow:
-
-    Context: selected demonstration vessel and latest update time.
-    Status: a high-level indication of whether the latest reading exceeds the configured demonstration limits.
-    Measurements: summary cards for the latest motion values.
-    Trends: time-series charts for examining changes over the retained history.
-    Warnings: a table containing triggered rules, current values, and suggested verification actions.
-    Data access: a raw-data table and CSV export control.
-
-4. Sensor Model and Data
-
-MarineSense generates a structured record containing the following fields:
-Field	Description	Demonstration unit
-timestamp	Date and time associated with the reading	Local application time
-roll	Side-to-side rotational angle	Degrees (°)
-pitch	Forward/backward rotational angle	Degrees (°)
-heave	Vertical displacement	Metres (m)
-accel	Acceleration measurement	Metres per second squared (m/s²)
-temperature	Simulated temperature measurement	Degrees Celsius (°C)
-
-The simulation uses bounded changes relative to the preceding reading for roll, pitch, heave, and acceleration. This creates a degree of continuity between successive values rather than generating every measurement independently.
-
-A low-probability event is also introduced during generation to make threshold warnings observable during a demonstration. The resulting values are fictional and are not calibrated against a particular vessel, sensor, sea state, or measurement standard.
-Historical data generation
-
-On initial application setup, MarineSense creates a history containing 60 readings. Their timestamps are assigned at one-minute intervals. Subsequent manual or automatic updates append new readings to the history.
-
-The application retains the most recent 180 readings when new data is appended. This provides a bounded in-memory history for the dashboard session.
-5. System Architecture
-
-The current implementation follows a lightweight, single-application architecture.
-Sensor SimulationStructured MeasurementRecordPandas DataFrameStreamlit Session StateMonitoring and ThresholdEvaluationPlotly Time-Series VisualisationStatus and Warning InterfaceInteractive DashboardRaw-Data TableCSV Export
-Processing workflow
-
-    Generation: the simulation function creates a new measurement using the previous reading as its starting point.
-    Structuring: the generated values are represented as a record with a timestamp and named measurement fields.
-    Storage: Pandas DataFrames organise the readings, while Streamlit Session State retains the current history across application reruns.
-    Evaluation: the latest roll and acceleration values are compared with the thresholds selected in the sidebar.
-    Presentation: Streamlit renders the current status, KPI cards, warning information, and data tables.
-    Visualisation: Plotly renders interactive charts from the retained time-series data.
-    Export: the recorded history can be serialised as CSV for further inspection.
-
-Architectural scope
-
-The current version keeps the simulation, data handling, monitoring rules, and user interface in app.py. This is appropriate for a compact demonstration, but it is not a modular production architecture. A future implementation could separate these responsibilities into dedicated modules and introduce a persistent data store and a defined sensor-ingestion interface.
-6. Monitoring and Alert Logic
-
-MarineSense demonstrates a basic rule-based monitoring approach. The application evaluates the latest reading against two configurable thresholds.
-Roll-angle rule
-
-The absolute value of roll is evaluated so that positive and negative rotations are treated consistently:
-∣roll∣≥roll threshold
-∣roll∣≥roll threshold
-
-The default demonstration threshold is 12°. The sidebar allows the user to select a value between 5° and 18°.
-Acceleration rule
-
-The latest acceleration measurement is evaluated using:
-acceleration≥acceleration threshold
-acceleration≥acceleration threshold
-
-The default demonstration threshold is 1.5 m/s². The sidebar allows the user to select a value between 0.5 and 2.5 m/s².
-Status evaluation
-
-The overall demonstration status is set to a warning state when either rule is triggered:
-Warning=Roll warning∨Acceleration warning
-Warning=Roll warning∨Acceleration warning
-
-When neither condition is met, the interface displays a nominal status.
-
-Triggered rules are listed in the alarm panel with the measurement name, current value, rule that was evaluated, and a suggested verification action.
-
-Important: these thresholds are illustrative software parameters. They are not maritime operating limits, engineering recommendations, or validated safety criteria. The application evaluates the latest reading; it does not implement a certified alarm-management process, persistence logic, or safety response workflow.
-7. Technology Stack
-Technology	Role in MarineSense
-Python	Application logic and sensor-data simulation
-Streamlit	Browser-based dashboard and interactive controls
-Pandas	Tabular data structures, history management, and CSV preparation
-Plotly	Interactive time-series charts
-CSS	Custom dashboard styling
-Dependencies
-
-The project declares the following minimum package versions in requirements.txt:
-streamlit >= 1.36
-pandas >= 2.0
-plotly >= 5.20
-
-Python 3.10 or newer is required.
-
-8. Project Structure
-```
-MarineSense/
-├── app.py                 # Dashboard, simulation, data handling and warning logic
-├── requirements.txt       # Python package dependencies
-├── run_dashboard.bat      # Windows quick-start script
-├── PRESENTATION_NOTES.md  # Supporting presentation notes
-└── README.md              # Project documentation
+```bash
+python --version
 ```
 
-9. Installation and Execution
-    
-Prerequisites
+### Installation
 
-    Python 3.10 or newer
-    Git (if cloning the repository)
-    A terminal or code editor, such as Visual Studio Code
-    An internet connection for the initial dependency installation
+**1. Get the code**
 
-9.1 Clone the repository
+```bash
 git clone https://github.com/Starley-iggy/MarineSense.git
 cd MarineSense
+```
 
+Or click **Code → Download ZIP** on GitHub and unzip it.
 
+**2. Create a virtual environment**
 
-Alternatively, download the repository as a ZIP archive and extract it locally.
-9.2 Create a virtual environment
+A virtual environment keeps this project's packages separate from the rest of your computer.
 
-Windows (PowerShell):
+<details>
+<summary>Windows (PowerShell)</summary>
+
+```powershell
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
+```
 
-macOS / Linux:
+</details>
+
+<details>
+<summary>macOS / Linux</summary>
+
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
+```
 
+</details>
 
-A virtual environment isolates the project's Python dependencies from other Python applications on the machine.
-9.3 Install dependencies
+**3. Install the dependencies**
+
+```bash
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+```
 
+### Running the app
 
-9.4 Start the dashboard
+```bash
 python -m streamlit run app.py
+```
 
-Streamlit will display a local address in the terminal. Open that address in a browser; the default is usually:
-http://localhost:8501
-Windows quick start
+Your browser should open automatically. If it doesn't, go to the address shown in the terminal — usually <http://localhost:8501>.
 
-On Windows, the included run_dashboard.bat script can be used to create the virtual environment if necessary, install the dependencies, and launch the dashboard.
-10. Using the Dashboard
+> [!TIP]
+> **Windows shortcut:** double-click `run_dashboard.bat`. It creates the virtual environment if needed, installs everything, and starts the app.
 
-After launching the application:
+To stop the app, press `Ctrl + C` in the terminal.
 
-    Select one of the fictional demonstration vessels in the sidebar.
-    Review the current roll, pitch, heave, and acceleration values.
-    Adjust the roll and acceleration thresholds to explore the warning behaviour.
-    Select Generate new reading to append a single simulated measurement.
-    Enable Live simulation to generate readings automatically at approximately three-second intervals.
-    Inspect the charts to explore how the measurements change over time.
-    Open the raw-data section to inspect the underlying records.
-    Use the CSV export control to download the available history.
+## Usage
 
-The dashboard is designed to make the data-processing and monitoring workflow observable during a demonstration.
-11. Data Export
+1. **Pick a ship** in the left sidebar.
+2. **Read the key numbers** at the top: roll, pitch, heave, and acceleration.
+3. **Set your limits** for roll and acceleration with the sliders.
+4. Click **Generate new reading** to add one new measurement.
+5. Turn on **Live simulation** to add a new reading every ~3 seconds.
+6. **Explore the charts** — hover to see exact values, drag to zoom.
+7. Open the **raw data** section to see every reading.
+8. Click the **CSV export** button to download the data.
 
-The application provides a CSV export of the current in-memory sensor history.
+The status at the top tells you at a glance whether everything is within your limits (**nominal**) or not (**warning**). Any warnings are listed in a table with the value, the rule that was broken, and a suggested check.
 
-The exported file is named:
-marinesense_sensor_history.csv
+## Configuration
 
-The export contains the measurement fields and timestamps represented in the application's history. It can be opened in spreadsheet software or used as input for additional analysis.
+Warning limits are set in the sidebar while the app runs. No config files are needed.
 
-The current implementation does not write readings to a database or guarantee persistence after the Streamlit session or application process ends.
+| Setting | Default | Range | Warning when… |
+|---|---|---|---|
+| Roll threshold | 12° | 5° – 18° | the roll (left or right) is **at or above** the limit |
+| Acceleration threshold | 1.5 m/s² | 0.5 – 2.5 m/s² | acceleration is **at or above** the limit |
 
-12. Design Considerations
-Separation of measurement and presentation
+Roll is checked in both directions: a tilt of −13° counts the same as +13°.
 
-The dashboard derives its displayed metrics, charts, and warning status from the generated measurement history. This makes the relationship between the underlying data and the user interface visible and easier to explain.
-Bounded simulation values
+```text
+roll warning          = |roll| >= roll threshold
+acceleration warning  = acceleration >= acceleration threshold
+status                = WARNING if either rule is true, otherwise NOMINAL
+```
 
-The generator constrains several measurements to defined ranges. This keeps the demonstration data within predictable bounds and makes the interface easier to explore. These bounds are simulation parameters, not physical operating constraints.
-Stateful interaction
+> [!NOTE]
+> These limits are example values for the demo. They are **not** real maritime safety limits.
 
-Streamlit reruns the application in response to user interaction. Session State is therefore used to retain the sensor history, most recent reading, and live-simulation setting between reruns.
-Bounded in-memory history
+## How it works
 
-The history is limited to the latest 180 readings as new measurements are appended. This keeps the demonstration's working data set bounded, but it is not a substitute for durable storage or long-term time-series management.
-Explicit treatment of uncertainty
+```mermaid
+flowchart LR
+    A[Simulator] --> B[New reading]
+    B --> C[History table<br/>Pandas]
+    C --> D[Session memory<br/>Streamlit]
+    D --> E[Warning check]
+    D --> F[Charts<br/>Plotly]
+    E --> G[Dashboard]
+    F --> G
+    D --> H[Raw data table]
+    D --> I[CSV export]
+```
 
-A monitoring interface can make measurements easier to interpret, but a visual status indicator does not establish that a vessel or system is safe. Real-world use would require verified sensor sources, documented units, calibration, data-quality controls, domain-approved thresholds, and appropriate validation.
-13. Current Limitations
+1. **Generate** – The simulator creates a new reading based on the previous one, so values change smoothly instead of jumping randomly. Occasionally it adds a bigger spike so you can see the warnings in action.
+2. **Store** – Readings are kept in a table (Pandas DataFrame). Streamlit's session memory keeps that table alive while you click around.
+3. **Check** – The newest roll and acceleration values are compared with your limits.
+4. **Show** – The dashboard displays the status, key numbers, warnings, and charts.
+5. **Export** – You can download all stored readings as a CSV file.
 
-MarineSense is a functional prototype, not a production maritime monitoring platform. Its current limitations include:
+## Data format
 
-    Simulated input: no physical sensor, vessel network, API, or message broker is connected.
-    In-memory storage: readings are not persisted in a database.
-    Limited monitoring rules: only roll angle and acceleration are evaluated for warnings.
-    Latest-reading evaluation: the warning logic does not analyse sustained conditions, rates of change, or historical alarm patterns.
-    No sensor validation pipeline: missing, delayed, duplicated, out-of-range, or corrupted external measurements are not handled as a production ingestion concern.
-    No authentication or authorisation: the application does not implement user accounts or role-based access.
-    No operational deployment configuration: high availability, observability, backup, access control, and deployment hardening are outside the current scope.
-    No safety certification: the application has not been assessed or approved for navigation, vessel operation, cargo decisions, or safety-critical use.
+Each reading has these fields:
 
-These limitations define the boundary between the current demonstration and a system that could be evaluated for operational use.
-14. Potential Future Development
+| Field | Type | Unit | Description |
+|---|---|---|---|
+| `timestamp` | datetime | local time | When the reading was taken |
+| `roll` | float | ° | Side-to-side tilt |
+| `pitch` | float | ° | Front-to-back tilt |
+| `heave` | float | m | Up-and-down movement |
+| `accel` | float | m/s² | Acceleration |
+| `temperature` | float | °C | Simulated temperature |
 
-The following items are possible development directions. They are not implemented in the current version.
-Area	Potential enhancement	Engineering value
-Data ingestion	Integrate a documented sensor API or a verified data feed	Replace simulated input with traceable measurements
-Messaging	Evaluate MQTT or another protocol once the source system is known	Support structured, near-real-time data delivery
-Persistence	Introduce SQLite or a production-appropriate time-series database	Retain measurements beyond an application session
-Architecture	Separate simulation, ingestion, processing, monitoring, and presentation	Improve maintainability and testability
-Data quality	Add validation for missing, stale, duplicated, and implausible readings	Improve confidence in downstream processing
-Monitoring	Add configurable rules, hysteresis, duration checks, and event history	Reduce simplistic threshold behaviour
-Testing	Add unit and integration tests for data generation and monitoring rules	Verify expected behaviour and reduce regression risk
-Observability	Introduce structured application logging and health checks	Improve troubleshooting and operational insight
-Security	Add authentication, authorisation, and secure configuration	Establish controlled access
-Deployment	Package and deploy the application using an agreed operational environment	Support repeatable deployment and maintenance
+The exported file is called `marinesense_sensor_history.csv`.
 
-Any integration with real maritime systems would first require clarification of the available equipment, data formats, communication protocols, units, update rates, data ownership, and applicable operational requirements.
-15. Disclaimer and Intended Use
+## Project structure
 
-MarineSense is an educational and portfolio prototype intended to demonstrate software development concepts related to sensor-data processing and visual monitoring.
+```text
+MarineSense/
+├── app.py                 # The whole app: simulator, data handling, warnings and dashboard
+├── requirements.txt       # Python packages the app needs
+├── run_dashboard.bat      # One-click start script for Windows
+├── PRESENTATION_NOTES.md  # Notes for presenting the project
+└── README.md              # This file
+```
 
-All measurements, vessel names, and warning thresholds are used for demonstration purposes. The project is not connected to real vessel equipment and must not be used to make navigation, cargo, engineering, or safety decisions.
+## Tech stack
 
-A real-world implementation would require, at minimum, verified data sources, documented measurement semantics and units, calibration and data-quality procedures, domain-expert review of monitoring rules, security controls, systematic testing, and an appropriate validation and approval process.
-<div align="center">
+| Tool | What it's used for |
+|---|---|
+| [Python](https://www.python.org/) | App logic and data simulation |
+| [Streamlit](https://streamlit.io/) | The web dashboard and controls |
+| [Pandas](https://pandas.pydata.org/) | Storing and organising readings, CSV export |
+| [Plotly](https://plotly.com/python/) | Interactive charts |
+| CSS | Custom dashboard styling |
 
-MarineSense · Python · Streamlit · Pandas · Plotly
+Minimum versions (from `requirements.txt`):
 
-An exploratory software prototype for marine sensor-data visualisation and monitoring.
-</div> 
+```text
+streamlit >= 1.36
+pandas    >= 2.0
+plotly    >= 5.20
+```
+
+## Limitations
+
+MarineSense is a **prototype**, not a production system.
+
+- **Fake input** – no real sensors, ship network, API, or message broker.
+- **No database** – data is lost when you close the app.
+- **Simple rules** – only roll and acceleration trigger warnings.
+- **Only the latest reading is checked** – no trends, durations, or rate-of-change analysis.
+- **No input validation** – missing, late, duplicate, or broken data is not handled.
+- **No login** – no user accounts or access control.
+- **Not deployment-ready** – no monitoring, backups, or hardening.
+- **Not certified** – not approved for any safety-critical use.
+
+## Roadmap
+
+Ideas for future versions. **None of these are built yet.**
+
+- [ ] Connect to a real, documented sensor feed or API
+- [ ] Support a messaging protocol such as MQTT
+- [ ] Save data in SQLite or a time-series database
+- [ ] Split `app.py` into separate modules (simulation, ingestion, monitoring, UI)
+- [ ] Validate incoming data (missing, stale, duplicate, impossible values)
+- [ ] Smarter warnings: hysteresis, duration checks, event history
+- [ ] Unit and integration tests
+- [ ] Logging and health checks
+- [ ] Authentication and access control
+- [ ] Packaged, repeatable deployment
+
+Before connecting to real ship systems, the equipment, data formats, protocols, units, update rates, data ownership, and operational requirements would all need to be clarified.
+
+## Contributing
+
+Suggestions and improvements are welcome.
+
+1. Fork the repository.
+2. Create a branch: `git checkout -b feature/my-change`
+3. Commit your changes: `git commit -m "Describe your change"`
+4. Push the branch: `git push origin feature/my-change`
+5. Open a pull request.
+
+For bugs or ideas, please [open an issue](https://github.com/Starley-iggy/MarineSense/issues).
+
+## License
+
+This project does not yet include a license. Until one is added, all rights are reserved by the author.
+
+## Disclaimer
+
+MarineSense is an educational and portfolio project. All measurements, ship names, and thresholds are made up for demonstration purposes.
+
+A real-world version would need, at minimum: verified data sources, documented units and meanings, calibration and data-quality checks, review of the warning rules by maritime experts, security controls, thorough testing, and a formal validation and approval process.
